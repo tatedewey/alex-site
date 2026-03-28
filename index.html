@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexandra Lamas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #ffffff;
+  --black: #0f0f0f;
+  --mid: #888;
+  --light: #e2e2e2;
+  --fs-micro: 9px;
+  --fs-small: 10.5px;
+  --fs-body: 12px;
+  --tracking: 0.13em;
+  --tracking-wide: 0.22em;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* body locked when panel open */
+body.panel-open { overflow: hidden; }
+
+* { cursor: none !important; }
+.cur {
+  position: fixed;
+  width: 5px; height: 5px;
+  background: var(--black);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%,-50%);
+  transition: width .2s, height .2s;
+}
+.cur-ring {
+  position: fixed;
+  width: 28px; height: 28px;
+  border: 1px solid rgba(15,15,15,0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s;
+}
+
+/* ── NAV ───────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.nav-name {
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  font-weight: 400;
+  text-decoration: none;
+  color: var(--black);
+}
+.nav-links { display: flex; gap: 24px; list-style: none; }
+.nav-links a {
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  opacity: 0.38;
+  transition: opacity .2s;
+}
+.nav-links a:hover { opacity: 1; }
+
+/* ── HERO ──────────────────────────────── */
+.hero {
+  padding-top: 62px;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+.hero-img { overflow: hidden; position: relative; }
+.hero-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+}
+.hero-text {
+  border-left: 1px solid var(--light);
+  padding: 48px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.hero-eyebrow {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  display: block;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: up .6s .3s forwards;
+}
+.hero-name {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(36px, 4.5vw, 68px);
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  animation: up .8s .45s forwards;
+}
+.hero-bottom { opacity: 0; animation: up .7s .65s forwards; }
+.hero-tagline {
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  color: var(--mid);
+  letter-spacing: 0.02em;
+  margin-bottom: 32px;
+  max-width: 220px;
+}
+.hero-scroll { display: flex; align-items: center; gap: 14px; }
+.scroll-line {
+  width: 32px; height: 1px;
+  background: var(--light);
+  position: relative; overflow: hidden;
+}
+.scroll-line::after {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--black);
+  animation: slideline 2s 1s infinite;
+}
+@keyframes slideline { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+.hero-scroll span {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+/* ── MARQUEE ───────────────────────────── */
+.marquee-bar {
+  border-top: 1px solid var(--light);
+  border-bottom: 1px solid var(--light);
+  overflow: hidden;
+  padding: 10px 0;
+}
+.marquee-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+.marquee-inner span {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  padding: 0 24px;
+}
+.marquee-inner span.sep { color: var(--light); padding: 0 4px; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── SECTION HEADER ────────────────────── */
+.s-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--light);
+}
+.s-label {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+/* ── ABOUT ─────────────────────────────── */
+.about { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.a-col {
+  padding: 44px 28px;
+  border-right: 1px solid var(--light);
+  border-bottom: 1px solid var(--light);
+}
+.a-col:last-child { border-right: none; }
+.a-col-lbl {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  display: block;
+  margin-bottom: 20px;
+}
+.a-bio { font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.65; }
+.a-list { list-style: none; }
+.a-list li {
+  font-size: var(--fs-body);
+  letter-spacing: 0.02em;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--light);
+}
+.a-list li:first-child { padding-top: 0; }
+.a-list li:last-child { border-bottom: none; }
+.a-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--light);
+}
+.a-row:last-child { border-bottom: none; }
+.a-key {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.a-val { font-size: var(--fs-body); letter-spacing: 0.02em; text-align: right; }
+
+/* ── PROJECTS ──────────────────────────── */
+.proj {
+  display: grid;
+  border-bottom: 1px solid var(--light);
+}
+.proj.p-left  { grid-template-columns: 3fr 2fr; }
+.proj.p-right { grid-template-columns: 2fr 3fr; }
+
+/* vertical video card: portrait video left, info right */
+.proj.p-video { grid-template-columns: 1fr 2fr; align-items: stretch; }
+
+.proj-img { overflow: hidden; aspect-ratio: 4/3; }
+.proj-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .9s cubic-bezier(.25,.46,.45,.94);
+}
+.proj:hover .proj-img img { transform: scale(1.04); }
+
+/* vertical video cell — natural 9/16 portrait */
+.proj-video {
+  overflow: hidden;
+  aspect-ratio: 9/16;
+  position: relative;
+  background: #0f0f0f;
+}
+.proj-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  border: none;
+  display: block;
+}
+
+.proj-info {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 1px solid var(--light);
+}
+.p-right .proj-info { border-left: none; border-right: 1px solid var(--light); }
+
+.proj-num {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  display: block;
+  margin-bottom: 16px;
+}
+.proj-title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(20px, 2.5vw, 36px);
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.proj-title em { font-style: italic; }
+.proj-type {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  display: block;
+  margin-bottom: 24px;
+}
+.proj-desc {
+  font-size: var(--fs-body);
+  line-height: 1.8;
+  color: var(--mid);
+  letter-spacing: 0.02em;
+  max-width: 240px;
+  flex: 1;
+}
+.proj-cta {
+  margin-top: 32px;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--black);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity .3s, transform .3s;
+}
+.proj:hover .proj-cta { opacity: 1; transform: translateY(0); }
+.proj-cta::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 1px;
+  background: var(--black);
+  flex-shrink: 0;
+}
+
+/* full-bleed */
+.proj.p-full { grid-template-columns: 1fr; position: relative; }
+.proj.p-full .proj-img { aspect-ratio: 21/8; position: relative; }
+.proj.p-full .proj-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 32px;
+  background: linear-gradient(to top, rgba(10,10,10,.72) 0%, transparent 100%);
+  border: none;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.proj.p-full .proj-num,
+.proj.p-full .proj-type  { color: rgba(255,255,255,0.5); }
+.proj.p-full .proj-title { color: #fff; }
+.proj.p-full .proj-cta   { color: #fff; margin-top: 0; }
+.proj.p-full .proj-cta::before { background: #fff; }
+.proj.p-full .proj-cta { opacity: 1; transform: none; }
+
+/* ── PROJECT PANEL OVERLAY ─────────────── */
+.panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,15,15,0.45);
+  z-index: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
+}
+.panel-backdrop.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.panel {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 92vh;
+  background: var(--white);
+  z-index: 700;
+  transform: translateY(100%);
+  transition: transform .55s cubic-bezier(.32,.72,0,1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panel.active { transform: translateY(0); }
+
+/* panel header bar */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 28px;
+  height: 52px;
+  border-bottom: 1px solid var(--light);
+  flex-shrink: 0;
+}
+.panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.panel-proj-num {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.panel-proj-name {
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.panel-close {
+  background: none;
+  border: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  font-family: inherit;
+  font-weight: 300;
+  transition: color .2s;
+}
+.panel-close:hover { color: var(--black); }
+.panel-close-x {
+  width: 16px; height: 16px;
+  position: relative;
+  flex-shrink: 0;
+}
+.panel-close-x::before,
+.panel-close-x::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0;
+  width: 100%; height: 1px;
+  background: currentColor;
+}
+.panel-close-x::before { transform: translateY(-50%) rotate(45deg); }
+.panel-close-x::after  { transform: translateY(-50%) rotate(-45deg); }
+
+/* panel scrollable body */
+.panel-body {
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* full-width video at top of panel (like hero image but video) */
+.panel-hero-video-full {
+  width: 100%;
+  aspect-ratio: 16/9;
+  position: relative;
+  background: #0f0f0f;
+}
+.panel-hero-video-full iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  border: none;
+  display: block;
+}
+
+/* panel hero image (non-video projects) */
+.panel-hero-img {
+  width: 100%;
+  overflow: hidden;
+}
+.panel-hero-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* panel video layout — side by side */
+.panel-video-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  min-height: 100%;
+  border-top: 1px solid var(--light);
+}
+.panel-video-col {
+  position: sticky;
+  top: 0;
+  height: calc(92vh - 52px);
+  overflow: hidden;
+  background: #0f0f0f;
+  border-right: 1px solid var(--light);
+}
+.panel-video-col iframe {
+  width: 100%; height: 100%;
+  border: none;
+  display: block;
+}
+.panel-video-info {
+  overflow-y: auto;
+  padding: 36px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* panel content grid (non-video) */
+.panel-content {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  border-top: 1px solid var(--light);
+}
+.panel-sidebar {
+  padding: 36px 28px;
+  border-right: 1px solid var(--light);
+}
+.panel-main {
+  padding: 36px 36px;
+}
+
+/* panel metadata rows */
+.panel-meta-block { margin-bottom: 32px; }
+.panel-meta-label {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  display: block;
+  margin-bottom: 12px;
+}
+.panel-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--light);
+}
+.panel-meta-row:last-child { border-bottom: none; }
+.panel-meta-key {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.panel-meta-val {
+  font-size: var(--fs-body);
+  letter-spacing: 0.02em;
+  text-align: right;
+}
+
+/* panel deliverable tags */
+.panel-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.panel-tag {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  border: 1px solid var(--light);
+  padding: 5px 10px;
+}
+
+/* panel text sections */
+.panel-section { margin-bottom: 36px; }
+.panel-section-label {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+  display: block;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--light);
+}
+.panel-section-text {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+.panel-result {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.5;
+  border-left: 1px solid var(--black);
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+/* panel bottom images — natural height, no cropping */
+.panel-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border-top: 1px solid var(--light);
+}
+.panel-images img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/* landscape images — stacked full width */
+.panel-images-landscape {
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+/* image + portrait video side by side */
+.panel-images-with-video {
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+.panel-bottom-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9/16;
+  background: #0f0f0f;
+  overflow: hidden;
+  display: block;
+  min-height: 200px;
+}
+.panel-bottom-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ── CONTACT ───────────────────────────── */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.c-left {
+  padding: 64px 28px;
+  border-right: 1px solid var(--light);
+  border-bottom: 1px solid var(--light);
+}
+.c-right {
+  padding: 64px 28px;
+  border-bottom: 1px solid var(--light);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+}
+.c-heading {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.05;
+  margin-bottom: 32px;
+}
+.c-heading em { font-style: italic; }
+.c-email {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 1px solid var(--light);
+  padding-bottom: 3px;
+  display: inline-block;
+  transition: border-color .2s;
+}
+.c-email:hover { border-color: var(--black); }
+.c-note { font-size: var(--fs-body); line-height: 1.8; color: var(--mid); letter-spacing: 0.02em; }
+.c-links { display: flex; flex-direction: column; }
+.c-link {
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--light);
+  display: flex;
+  justify-content: space-between;
+  transition: padding-left .2s;
+}
+.c-link:first-child { border-top: 1px solid var(--light); }
+.c-link:hover { padding-left: 6px; }
+.c-link::after { content: '↗'; color: var(--mid); font-size: 12px; }
+
+/* ── FOOTER ────────────────────────────── */
+footer { padding: 18px 28px; display: flex; justify-content: space-between; }
+footer span {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+/* ── REVEAL ────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .85s cubic-bezier(.25,.46,.45,.94), transform .85s cubic-bezier(.25,.46,.45,.94);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* ── KEYFRAMES ─────────────────────────── */
+@keyframes up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── MOBILE ────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+
+  .hero { grid-template-columns: 1fr; height: auto; max-height: none; }
+  .hero-img { height: 65vw; }
+  .hero-text { border-left: none; border-top: 1px solid var(--light); padding: 32px 20px 48px; }
+
+  .about { grid-template-columns: 1fr; }
+  .a-col { border-right: none; }
+
+  .proj.p-left, .proj.p-right, .proj.p-video { grid-template-columns: 1fr; }
+  .proj.p-video .proj-video { aspect-ratio: 9/16; width: 100%; }
+  .proj-info, .p-right .proj-info { border-left: none; border-right: none; border-top: 1px solid var(--light); }
+  .proj.p-full .proj-img { aspect-ratio: 4/3; }
+  .proj.p-full .proj-info { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* panel mobile */
+  .panel { height: 96vh; }
+  .panel-header { padding: 0 20px; }
+  .panel-hero-img { aspect-ratio: 4/3; }
+  .panel-video-layout { grid-template-columns: 1fr; }
+  .panel-video-col { position: relative; height: auto; aspect-ratio: 9/16; width: 100%; }
+  .panel-video-info { padding: 28px 20px; }
+  .panel-content { grid-template-columns: 1fr; }
+  .panel-sidebar { border-right: none; border-bottom: 1px solid var(--light); padding: 28px 20px; }
+  .panel-main { padding: 28px 20px; }
+  .panel-images { grid-template-columns: 1fr; }
+  .panel-result { font-size: 17px; }
+
+  .contact-grid { grid-template-columns: 1fr; }
+  .c-left { border-right: none; }
+  footer { flex-direction: column; gap: 6px; }
+  .s-head { padding: 12px 20px; }
+
+  /* show cta always on touch */
+  .proj-cta { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="nav-name">Alexandra Lamas</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-img">
+    <img src="https://drive.google.com/thumbnail?id=1tcwy3jcVkSQ1-XfKyrDKoPTuWsvGxssZ&sz=w1400" alt="Alexandra Lamas" />
+  </div>
+  <div class="hero-text">
+    <div>
+      <span class="hero-eyebrow">Creative Direction &amp; Brand Strategy</span>
+      <h1 class="hero-name">Alexandra<br>Lamas</h1>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-tagline">Brand strategy and creative direction for founders, fashion labels, spaces, and service-based brands.</p>
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MARQUEE ── -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>Creative Direction</span><span class="sep">—</span>
+    <span>Brand Strategy</span><span class="sep">—</span>
+    <span>Art Direction</span><span class="sep">—</span>
+    <span>Visual Identity</span><span class="sep">—</span>
+    <span>Campaign Creative</span><span class="sep">—</span>
+    <span>Positioning</span><span class="sep">—</span>
+    <span>Kansas City, MO</span><span class="sep">—</span>
+    <span>Available Worldwide</span><span class="sep">—</span>
+    <span>Creative Direction</span><span class="sep">—</span>
+    <span>Brand Strategy</span><span class="sep">—</span>
+    <span>Art Direction</span><span class="sep">—</span>
+    <span>Visual Identity</span><span class="sep">—</span>
+    <span>Campaign Creative</span><span class="sep">—</span>
+    <span>Positioning</span><span class="sep">—</span>
+    <span>Kansas City, MO</span><span class="sep">—</span>
+    <span>Available Worldwide</span><span class="sep">—</span>
+  </div>
+</div>
+
+<!-- ── ABOUT ── -->
+<div class="s-head" id="about">
+  <span class="s-label">About</span>
+  <span class="s-label">Kansas City, MO</span>
+</div>
+<section class="about">
+  <div class="a-col reveal">
+    <span class="a-col-lbl">Statement</span>
+    <p class="a-bio">Alexandra Lamas is a brand strategist and creative director working with founders, fashion labels, interior brands, and service-based companies. She builds the visual and verbal systems that define how a brand looks, sounds, and shows up — from color story to content strategy to what goes on a billboard.</p>
+  </div>
+  <div class="a-col reveal" style="transition-delay:.1s">
+    <span class="a-col-lbl">Capabilities</span>
+    <ul class="a-list">
+      <li>Brand Strategy &amp; Identity</li>
+      <li>Creative &amp; Art Direction</li>
+      <li>Content Strategy &amp; Pillars</li>
+      <li>Shot Lists &amp; Storyboards</li>
+      <li>Social Media &amp; Community</li>
+      <li>Copywriting &amp; Scripting</li>
+      <li>Event Concept &amp; Production</li>
+      <li>Influencer &amp; PR</li>
+    </ul>
+  </div>
+  <div class="a-col reveal" style="transition-delay:.2s">
+    <span class="a-col-lbl">Info</span>
+    <div>
+      <div class="a-row"><span class="a-key">Base</span><span class="a-val">Kansas City, MO</span></div>
+      <div class="a-row"><span class="a-key">Travel</span><span class="a-val">Worldwide</span></div>
+      <div class="a-row"><span class="a-key">Availability</span><span class="a-val">Select clients</span></div>
+      <div class="a-row"><span class="a-key">Focus</span><span class="a-val">Founders, Fashion, Spaces, Services</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WORK ── -->
+<div class="s-head" id="work">
+  <span class="s-label">Selected Work</span>
+  <span class="s-label">04 Projects</span>
+</div>
+<section class="projects">
+
+  <div class="proj p-video reveal" data-project="0">
+    <div class="proj-img proj-video">
+      <iframe
+        src="https://drive.google.com/file/d/1gQ-yMb9yIm3G5tOOVB5fPLxuG_pu2hJu/preview"
+        allow="autoplay"
+        allowfullscreen
+        frameborder="0"
+      ></iframe>
+    </div>
+    <div class="proj-info">
+      <div>
+        <span class="proj-num">01 / 04</span>
+        <h2 class="proj-title"><em>"Woman"</em><br>by Blackbird</h2>
+        <span class="proj-type">Campaign Creative · Art Direction</span>
+        <p class="proj-desc">A brand built from the ground up alongside Blackbird's founder — events, content, identity, and everything in between.</p>
+      </div>
+      <button class="proj-cta" onclick="openPanel(0)">View project</button>
+    </div>
+  </div>
+
+  <div class="proj p-right reveal" data-project="1">
+    <div class="proj-info">
+      <div>
+        <span class="proj-num">02 / 04</span>
+        <h2 class="proj-title">Blackbird</h2>
+        <span class="proj-type">Brand Identity · Visual System</span>
+        <p class="proj-desc">From shooting reels to shaping the brand — a creative partnership that grew into full direction.</p>
+      </div>
+      <button class="proj-cta" onclick="openPanel(1)">View project</button>
+    </div>
+    <div class="proj-img">
+      <img src="https://drive.google.com/thumbnail?id=1mZc44oHohi1MX7-KwXYSSA6LtQA__Wth&sz=w1200" alt="Blackbird" />
+    </div>
+  </div>
+
+  <div class="proj p-full reveal" data-project="2">
+    <div class="proj-img">
+      <iframe
+        src="https://drive.google.com/file/d/1o6mc9uIvI7gsFWC1Yj4ZVF6fDJ0WORWV/preview"
+        allow="autoplay"
+        allowfullscreen
+        frameborder="0"
+        style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+      ></iframe>
+    </div>
+    <div class="proj-info">
+      <div>
+        <span class="proj-num">03 / 04</span>
+        <h2 class="proj-title">Relative Lighting</h2>
+        <span class="proj-type">Brand Positioning · Art Direction</span>
+      </div>
+      <button class="proj-cta" onclick="openPanel(2)">View project</button>
+    </div>
+  </div>
+
+  <div class="proj p-left reveal" data-project="3">
+    <div class="proj-img" style="aspect-ratio: unset; height: auto;">
+      <img src="https://drive.google.com/thumbnail?id=1ZUwOd0jokc4oBZJrVV0irulAWYvmfe3Z&sz=w1200" alt="Cicada Co." style="object-fit: contain; height: auto; object-position: unset;" />
+    </div>
+    <div class="proj-info">
+      <div>
+        <span class="proj-num">04 / 04</span>
+        <h2 class="proj-title">Cicada Co.</h2>
+        <span class="proj-type">Creative Direction · Identity</span>
+        <p class="proj-desc">Creative direction and brand strategy for a growing company finding its voice and visual identity.</p>
+      </div>
+      <button class="proj-cta" onclick="openPanel(3)">View project</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── CONTACT ── -->
+<div class="s-head" id="contact">
+  <span class="s-label">Contact</span>
+  <span class="s-label">Open to new projects</span>
+</div>
+<section class="contact-grid">
+  <div class="c-left reveal">
+    <h2 class="c-heading">Let's build<br>something<br><em>worth<br>noticing.</em></h2>
+    <a href="/cdn-cgi/l/email-protection#4b232e2727240b2a272e332a252f392a272a262a3865282426" class="c-email"><span class="__cf_email__" data-cfemail="b5ddd0d9d9daf5d4d9d0cdd4dbd1c7d4d9d4d8d4c69bd6dad8">[email&#160;protected]</span></a>
+  </div>
+  <div class="c-right reveal" style="transition-delay:.1s">
+    <p class="c-note">Available for brand strategy, creative direction, content systems, and ongoing partnerships. Working with founders, fashion labels, interior brands, and service-based companies.</p>
+    <div class="c-links">
+      <a href="#" class="c-link">Instagram</a>
+      <a href="#" class="c-link">LinkedIn</a>
+      <a href="#" class="c-link">Read.cv</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Alexandra Lamas</span>
+  <span>Creative Director &amp; Brand Strategist</span>
+</footer>
+
+<!-- ── PROJECT PANEL ── -->
+<div class="panel-backdrop" id="backdrop" onclick="closePanel()"></div>
+<div class="panel" id="panel">
+  <div class="panel-header">
+    <div class="panel-header-left">
+      <span class="panel-proj-num" id="panelNum"></span>
+      <span class="panel-proj-name" id="panelName"></span>
+    </div>
+    <button class="panel-close" onclick="closePanel()">
+      Close
+      <span class="panel-close-x"></span>
+    </button>
+  </div>
+  <div class="panel-body" id="panelBody">
+    <!-- injected by JS -->
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── PROJECT DATA ──────────────────────────────────────────────
+const projects = [
+  {
+    num: '01 / 04',
+    name: '"Woman" by Blackbird',
+    type: 'Campaign Creative · Art Direction',
+    heroVideo: 'https://drive.google.com/file/d/1Q-glFnjxJ99WSMHRaAdo1lXrQS3jFVKC/preview',
+    img2: 'https://drive.google.com/thumbnail?id=1kouf5waVFDnWDYUb_5t6ZtLOiYP5gSDd&sz=w1200',
+    img3: 'https://drive.google.com/thumbnail?id=1IcF0s9y55qKGWh2de-C2I04bdvxf_U8m&sz=w1200',
+    meta: [
+      { k: 'Client',   v: 'Blackbird' },
+      { k: 'Year',     v: '2024' },
+      { k: 'Role',     v: 'Creative Director' },
+      { k: 'Medium',   v: 'Campaign, Editorial' },
+    ],
+    deliverables: ['Creative Direction', 'Content Strategy', 'Shoot Direction', 'Social Media', 'Brand Development'],
+    overview: 'Woman by Blackbird is a secondary brand born out of Blackbird\'s event programming. Alexandra built it from the ground up alongside the CEO — establishing the look and feel, color story, typography, and content direction that gave Woman its own identity while remaining rooted in Blackbird.',
+    role: 'Led all creative and operational aspects of the brand launch: coordinating events, directing shoots, conceptualizing and producing content, managing social media, and making the foundational brand decisions around where Woman goes and what it looks like when it gets there.',
+    result: 'Woman launched as a distinct brand with its own audience, aesthetic, and content cadence — growing organically through a consistent visual identity and community-driven event strategy.',
+  },
+  {
+    num: '02 / 04',
+    name: 'Blackbird',
+    type: 'Brand Identity · Visual System',
+    heroImg: 'https://drive.google.com/thumbnail?id=1djZOf9Xhx28ya9ESk1rwgVq0gDMUXscN&sz=w1600',
+    img2: 'https://drive.google.com/thumbnail?id=1LGkNsF8IXKFJ1HvWheYYNnS6unZN35ZU&sz=w1200',
+    bottomVideo: 'https://drive.google.com/file/d/1ckEX-fL-2d3X6JJyH5VnQl3P6SyzRkvz/preview',
+    meta: [
+      { k: 'Client',   v: 'Blackbird' },
+      { k: 'Year',     v: '2023' },
+      { k: 'Role',     v: 'Creative Director' },
+      { k: 'Medium',   v: 'Identity, Print, Digital' },
+    ],
+    deliverables: ['Content Creation', 'Reels &amp; Video', 'Creative Direction', 'Brand Strategy', 'Graphics'],
+    overview: 'Alexandra\'s relationship with Blackbird started with shooting reels and creating video content — and evolved into a leadership role at the center of the brand\'s creative decision-making. From graphics to brand direction, she became the person shaping what Blackbird looked like and where it was going.',
+    role: 'Created and directed video and photo content, developed graphics, and grew into a senior creative role advising on brand-level decisions — the visual hierarchy, the palette, the tone, and the strategic direction of the brand as it scaled.',
+    result: 'A sustained creative partnership that grew from content execution into full creative leadership, ultimately spawning a second brand — Woman by Blackbird.',
+  },
+  {
+    num: '03 / 04',
+    name: 'Relative Lighting',
+    type: 'Brand Positioning · Art Direction',
+    heroVideo: 'https://drive.google.com/file/d/1UPO34HEjjN182LQFk9A8wQoqveGEzidw/preview',
+    heroVideoFull: true,
+    img2: 'https://drive.google.com/thumbnail?id=1zdlB_7Com-My0PrireQqbaKhBGd-q5u2&sz=w1200',
+    img3: 'https://drive.google.com/thumbnail?id=1JBVWLNmXJ5eApoalf_a0FjfV2MmuJvp6&sz=w1200',
+    meta: [
+      { k: 'Client',   v: 'Relative Lighting' },
+      { k: 'Year',     v: '2024' },
+      { k: 'Role',     v: 'Brand Strategist, AD' },
+      { k: 'Medium',   v: 'Strategy, Identity, Web' },
+    ],
+    deliverables: ['Brand Strategy', 'Creative Briefs', 'Content Direction', 'Shoot Concepts', 'Scripting'],
+    overview: 'Relative Lighting\'s founder came to Alexandra in the middle of a rebrand — clear on the aesthetic she wanted but needing a strategic framework and creative direction to get there. The work centered on clarifying the brand\'s positioning and building a content system that could carry it forward.',
+    role: 'Created comprehensive creative briefs outlining strategy, content focus, and visual direction. Developed shoot concepts and scripts in collaboration with the brand\'s videographer, assisted on shoots, and served as the connective tissue between the founder and the creative team.',
+    result: 'Relative Lighting has a defined rebrand strategy, a working content system, and a creative team aligned around a clear direction — with ongoing collaboration to execute it.',
+  },
+  {
+    num: '04 / 04',
+    name: 'Cicada Co.',
+    type: 'Creative Direction · Identity',
+    heroImg: 'https://drive.google.com/thumbnail?id=1n19KWB-ql1rr4YMuq7oh29UCMdV9046g&sz=w1600',
+    cardImg: 'https://drive.google.com/thumbnail?id=1ZUwOd0jokc4oBZJrVV0irulAWYvmfe3Z&sz=w1200',
+    img2: 'https://drive.google.com/thumbnail?id=10kjJPyeFhZ0fufZHPSzdXrRN_lJmGuy9&sz=w1600',
+    img3: 'https://drive.google.com/thumbnail?id=1qksC6M-XH8Uy8UdtVlGt4KFwztlgLQ16&sz=w1600',
+    landscapeImages: true,
+    meta: [
+      { k: 'Client',   v: 'Cicada Co.' },
+      { k: 'Year',     v: '2024' },
+      { k: 'Role',     v: 'Creative Director' },
+      { k: 'Medium',   v: 'Identity, Campaign, Digital' },
+    ],
+    deliverables: ['Creative Direction', 'Brand Strategy', 'Content Direction', 'Social Guidance', 'Pitch Decks', 'Website Direction'],
+    overview: 'Cicada Co. brought Alexandra in to sharpen their brand and optimize how it showed up in the world — from social media to commercial developer decks. Working alongside their existing social team and the CEO, the focus was on building a cohesive aesthetic and strategic foundation for a brand that was ready to grow.',
+    role: 'Provided creative direction across content strategy, shoot guidance, and overall brand aesthetic. Worked with the social media manager and content creator to restructure their approach, directed how content should be shot and presented, assisted with website direction, and created decks for commercial developers.',
+    result: 'Cicada Co. has a clearer brand identity, a more intentional content strategy, and the materials to communicate their vision to partners and developers with confidence.',
+  },
+];
+
+// ── PANEL LOGIC ───────────────────────────────────────────────
+function openPanel(idx) {
+  const p = projects[idx];
+  document.getElementById('panelNum').textContent  = p.num;
+  document.getElementById('panelName').textContent = p.name;
+
+  const tagsHTML = p.deliverables.map(d => `<span class="panel-tag">${d}</span>`).join('');
+  const metaHTML = p.meta.map(m => `
+    <div class="panel-meta-row">
+      <span class="panel-meta-key">${m.k}</span>
+      <span class="panel-meta-val">${m.v}</span>
+    </div>`).join('');
+
+  const infoHTML = `
+    <div class="panel-meta-block">
+      <span class="panel-meta-label">Project Info</span>
+      ${metaHTML}
+    </div>
+    <div class="panel-meta-block">
+      <span class="panel-meta-label">Deliverables</span>
+      <div class="panel-tags">${tagsHTML}</div>
+    </div>
+    <div class="panel-section">
+      <span class="panel-section-label">Overview</span>
+      <p class="panel-section-text">${p.overview}</p>
+    </div>
+    <div class="panel-section">
+      <span class="panel-section-label">Role</span>
+      <p class="panel-section-text">${p.role}</p>
+    </div>
+    <div class="panel-section">
+      <span class="panel-section-label">Result</span>
+      <p class="panel-result">${p.result}</p>
+    </div>
+    ${(p.img2 || p.bottomVideo) ? `
+    <div class="panel-images ${p.landscapeImages ? 'panel-images-landscape' : ''} ${p.bottomVideo ? 'panel-images-with-video' : ''}" style="margin-top:36px;border-top:1px solid var(--light);padding-top:2px;">
+      ${p.img2 ? `<img src="${p.img2}" alt="${p.name} detail" />` : ''}
+      ${p.bottomVideo ? `<div class="panel-bottom-video"><iframe src="${p.bottomVideo}" allow="autoplay; fullscreen" allowfullscreen loading="lazy" frameborder="0" style="border:0"></iframe></div>` : (p.img3 ? `<img src="${p.img3}" alt="${p.name} detail" />` : '')}
+    </div>` : ''}
+  `;
+
+  if (p.heroVideo && !p.heroVideoFull) {
+    document.getElementById('panelBody').innerHTML = `
+      <div class="panel-video-layout">
+        <div class="panel-video-col">
+          <iframe src="${p.heroVideo}" allow="autoplay" allowfullscreen frameborder="0"></iframe>
+        </div>
+        <div class="panel-video-info">${infoHTML}</div>
+      </div>
+    `;
+  } else if (p.heroVideo && p.heroVideoFull) {
+    document.getElementById('panelBody').innerHTML = `
+      <div class="panel-hero-video-full">
+        <iframe src="${p.heroVideo}" allow="autoplay" allowfullscreen frameborder="0"></iframe>
+      </div>
+      <div class="panel-content">
+        <div class="panel-sidebar">
+          <div class="panel-meta-block">
+            <span class="panel-meta-label">Project Info</span>
+            ${metaHTML}
+          </div>
+          <div class="panel-meta-block">
+            <span class="panel-meta-label">Deliverables</span>
+            <div class="panel-tags">${tagsHTML}</div>
+          </div>
+        </div>
+        <div class="panel-main">
+          <div class="panel-section">
+            <span class="panel-section-label">Overview</span>
+            <p class="panel-section-text">${p.overview}</p>
+          </div>
+          <div class="panel-section">
+            <span class="panel-section-label">Role</span>
+            <p class="panel-section-text">${p.role}</p>
+          </div>
+          <div class="panel-section">
+            <span class="panel-section-label">Result</span>
+            <p class="panel-result">${p.result}</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel-images">
+        ${p.img2 ? `<img src="${p.img2}" alt="${p.name} detail" />` : ''}
+        ${p.img3 ? `<img src="${p.img3}" alt="${p.name} detail" />` : ''}
+      </div>
+    `;
+  } else {
+    document.getElementById('panelBody').innerHTML = `
+      <div class="panel-hero-img">
+        <img src="${p.heroImg}" alt="${p.name}" />
+      </div>
+      <div class="panel-content">
+        <div class="panel-sidebar">
+          <div class="panel-meta-block">
+            <span class="panel-meta-label">Project Info</span>
+            ${metaHTML}
+          </div>
+          <div class="panel-meta-block">
+            <span class="panel-meta-label">Deliverables</span>
+            <div class="panel-tags">${tagsHTML}</div>
+          </div>
+        </div>
+        <div class="panel-main">
+          <div class="panel-section">
+            <span class="panel-section-label">Overview</span>
+            <p class="panel-section-text">${p.overview}</p>
+          </div>
+          <div class="panel-section">
+            <span class="panel-section-label">Role</span>
+            <p class="panel-section-text">${p.role}</p>
+          </div>
+          <div class="panel-section">
+            <span class="panel-section-label">Result</span>
+            <p class="panel-result">${p.result}</p>
+          </div>
+        </div>
+      </div>
+      <div class="panel-images">
+        <img src="${p.img2}" alt="${p.name} detail" />
+        <img src="${p.img3}" alt="${p.name} detail" />
+      </div>
+    `;
+  }
+
+  document.getElementById('panelBody').scrollTop = 0;
+  document.getElementById('panel').classList.add('active');
+  document.getElementById('backdrop').classList.add('active');
+  document.body.classList.add('panel-open');
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('active');
+  document.getElementById('backdrop').classList.remove('active');
+  document.body.classList.remove('panel-open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+// ── CURSOR ────────────────────────────────────────────────────
+const cur  = document.getElementById('cur');
+const ring = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+(function tick(){
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+  rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(tick);
+})();
+document.querySelectorAll('a, button, .proj').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cur.style.width='10px'; cur.style.height='10px';
+    ring.style.width='44px'; ring.style.height='44px';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cur.style.width='5px'; cur.style.height='5px';
+    ring.style.width='28px'; ring.style.height='28px';
+  });
+});
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
